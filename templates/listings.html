@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}My Listings - Digital Recycling Marketplace{% endblock %}
+{% block content %}
+<h1>My Listings</h1>
+{% if listings %}
+<table class="card">
+  <thead>
+    <tr><th>ID</th><th>Category</th><th>Quantity</th><th>Condition</th><th>Price (INR)</th><th>Status</th><th>Created</th></tr>
+  </thead>
+  <tbody>
+    {% for l in listings %}
+    <tr>
+      <td>{{ l['id'] }}</td>
+      <td>{{ l['category'] }}</td>
+      <td>{{ l['quantity'] }}</td>
+      <td>{{ l['condition'] }}</td>
+      <td>{{ '%.2f'|format(l['price']) }}</td>
+      <td><span class="badge {{ l['status']|lower|replace(' ', '-') }}">{{ l['status'] }}</span></td>
+      <td>{{ l['created_at'] }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="card">No listings yet. <a href="{{ url_for('new_listing') }}">Create your first listing.</a></p>
+{% endif %}
+{% endblock %}
