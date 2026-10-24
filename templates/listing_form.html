@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}New Listing - Digital Recycling Marketplace{% endblock %}
+{% block content %}
+<h1>Create Recycling Item Listing</h1>
+<form method="post" novalidate class="card">
+  <label for="category">Category</label>
+  <select id="category" name="category">
+    <option value="">-- Select category --</option>
+    {% for c in categories %}
+      <option value="{{ c }}" {{ 'selected' if form.get('category') == c }}>{{ c }}</option>
+    {% endfor %}
+  </select>
+  {% if errors.category %}<p class="error">{{ errors.category }}</p>{% endif %}
+
+  <label for="quantity">Quantity</label>
+  <input id="quantity" name="quantity" type="text" inputmode="numeric" value="{{ form.get('quantity', '') }}">
+  {% if errors.quantity %}<p class="error">{{ errors.quantity }}</p>{% endif %}
+
+  <label for="condition">Condition</label>
+  <select id="condition" name="condition">
+    <option value="">-- Select condition --</option>
+    {% for c in conditions %}
+      <option value="{{ c }}" {{ 'selected' if form.get('condition') == c }}>{{ c }}</option>
+    {% endfor %}
+  </select>
+  {% if errors.condition %}<p class="error">{{ errors.condition }}</p>{% endif %}
+
+  <label for="description">Description (max {{ max_description }} characters)</label>
+  <textarea id="description" name="description" rows="4">{{ form.get('description', '') }}</textarea>
+  {% if errors.description %}<p class="error">{{ errors.description }}</p>{% endif %}
+
+  <label for="price">Price (INR)</label>
+  <input id="price" name="price" type="text" inputmode="decimal" value="{{ form.get('price', '') }}">
+  {% if errors.price %}<p class="error">{{ errors.price }}</p>{% endif %}
+
+  <button type="submit">Submit Listing</button>
+</form>
+{% endblock %}

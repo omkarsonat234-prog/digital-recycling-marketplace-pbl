@@ -1,0 +1,21 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, Arial, sans-serif; background: #f3f6f4; color: #1d2b24; }
+.topbar { display: flex; justify-content: space-between; align-items: center; padding: 12px 24px; background: #1f6f4a; color: #fff; }
+.topbar a { color: #fff; text-decoration: none; margin-left: 16px; }
+.brand { font-weight: 700; margin-left: 0 !important; }
+.container { max-width: 860px; margin: 24px auto; padding: 0 16px; }
+.card { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.12); width: 100%; }
+label { display: block; margin: 14px 0 4px; font-weight: 600; }
+input, select, textarea { width: 100%; padding: 8px; border: 1px solid #b8c4bd; border-radius: 4px; font: inherit; }
+button { margin-top: 18px; padding: 10px 20px; background: #1f6f4a; color: #fff; border: 0; border-radius: 4px; cursor: pointer; font: inherit; }
+button:hover { background: #17593b; }
+.error { color: #b3261e; margin: 4px 0 0; font-size: .9rem; }
+.flash { padding: 10px 14px; border-radius: 4px; margin-bottom: 14px; }
+.flash.success { background: #dff3e7; color: #14532d; }
+table { border-collapse: collapse; }
+th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid #e3e9e5; }
+.badge { padding: 2px 8px; border-radius: 10px; font-size: .85rem; background: #e5e7eb; }
+.badge.pending { background: #fff3cd; }
+.badge.approved { background: #dff3e7; }
+.badge.rejected { background: #f8d7da; }
+.badge.needs-correction { background: #ffe5cc; }
