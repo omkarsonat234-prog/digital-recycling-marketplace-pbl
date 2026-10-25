@@ -77,3 +77,32 @@ def validate_listing(form):
                 clean["price"] = round(price, 2)
 
     return clean, errors
+
+
+# ---------------- Admin decision validation (DRM-15/16) ----------------
+
+DECISIONS = {
+    "approve": "Approved",
+    "reject": "Rejected",
+    "return": "Needs Correction",
+}
+REASON_REQUIRED = ("reject", "return")
+MAX_REASON = 300
+
+
+def validate_decision(form):
+    """Validate the admin decision form.
+
+    Returns (new_status, reason, error). `error` is None when valid.
+    A reason is mandatory for Reject and Return for Correction.
+    """
+    action = (form.get("decision") or "").strip()
+    reason = (form.get("reason") or "").strip()
+
+    if action not in DECISIONS:
+        return None, reason, "Please choose Approve, Reject or Return for Correction."
+    if action in REASON_REQUIRED and not reason:
+        return None, reason, "A reason is required for Reject and Return for Correction."
+    if len(reason) > MAX_REASON:
+        return None, reason, f"Reason cannot exceed {MAX_REASON} characters."
+    return DECISIONS[action], reason, None
