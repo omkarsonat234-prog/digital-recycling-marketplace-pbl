@@ -3,8 +3,8 @@
 Individual PBL project managed in Jira (project key: DRM).
 
 ## Modules
-1. Recycling Item Listing Management (Day 2 - implemented)
-2. Admin Listing Verification (Day 3 - pending)
+1. Recycling Item Listing Management
+2. Admin Listing Verification
 
 ## Tech stack
 Python 3, Flask, SQLite, HTML/CSS
@@ -19,6 +19,11 @@ Open http://127.0.0.1:5000
 ## Pages (Module 1)
 - `/listings/new` - create a listing (category, quantity, condition, description, price)
 - `/listings` - view listings with status
+
+## Pages (Module 2)
+- `/admin/listings` - admin: all submitted listings (Pending first)
+- `/admin/listings/<id>` - admin: review, Approve / Reject / Return for Correction with reason
+- `/marketplace` - public marketplace, approved listings only
 
 ## Tests
 ```
