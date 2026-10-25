@@ -19,3 +19,7 @@ th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid #e3e9e5; 
 .badge.approved { background: #dff3e7; }
 .badge.rejected { background: #f8d7da; }
 .badge.needs-correction { background: #ffe5cc; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+.item h3 { margin: 0 0 8px; }
+.price { font-weight: 700; color: #1f6f4a; }
+h2 { margin-top: 28px; }

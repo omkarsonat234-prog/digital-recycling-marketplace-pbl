@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Marketplace - Digital Recycling Marketplace{% endblock %}
+{% block content %}
+<h1>Marketplace</h1>
+{% if listings %}
+<div class="grid">
+  {% for l in listings %}
+  <div class="card item">
+    <h3>{{ l['category'] }}</h3>
+    <p>{{ l['description'] }}</p>
+    <p>Quantity: {{ l['quantity'] }} &middot; Condition: {{ l['condition'] }}</p>
+    <p class="price">INR {{ '%.2f'|format(l['price']) }}</p>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<p class="card">No approved listings yet.</p>
+{% endif %}
+{% endblock %}
