@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Admin - Submitted Listings{% endblock %}
+{% block content %}
+<h1>Admin: Submitted Listings</h1>
+{% if listings %}
+<table class="card">
+  <thead>
+    <tr><th>ID</th><th>Category</th><th>Qty</th><th>Condition</th><th>Description</th><th>Price (INR)</th><th>Status</th><th></th></tr>
+  </thead>
+  <tbody>
+    {% for l in listings %}
+    <tr>
+      <td>{{ l['id'] }}</td>
+      <td>{{ l['category'] }}</td>
+      <td>{{ l['quantity'] }}</td>
+      <td>{{ l['condition'] }}</td>
+      <td>{{ l['description'] }}</td>
+      <td>{{ '%.2f'|format(l['price']) }}</td>
+      <td><span class="badge {{ l['status']|lower|replace(' ', '-') }}">{{ l['status'] }}</span></td>
+      <td><a href="{{ url_for('admin_review', listing_id=l['id']) }}">{{ 'Review' if l['status'] == 'Pending' else 'View' }}</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="card">No listings submitted.</p>
+{% endif %}
+{% endblock %}
