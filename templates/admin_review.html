@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Review Listing #{{ listing['id'] }}{% endblock %}
+{% block content %}
+<h1>Review Listing #{{ listing['id'] }}</h1>
+<div class="card">
+  <p><strong>Category:</strong> {{ listing['category'] }}</p>
+  <p><strong>Quantity:</strong> {{ listing['quantity'] }}</p>
+  <p><strong>Condition:</strong> {{ listing['condition'] }}</p>
+  <p><strong>Description:</strong> {{ listing['description'] }}</p>
+  <p><strong>Price (INR):</strong> {{ '%.2f'|format(listing['price']) }}</p>
+  <p><strong>Status:</strong> <span class="badge {{ listing['status']|lower|replace(' ', '-') }}">{{ listing['status'] }}</span></p>
+</div>
+
+{% if listing['status'] == 'Pending' %}
+<form method="post" action="{{ url_for('admin_decide', listing_id=listing['id']) }}" class="card" novalidate>
+  <h2>Decision</h2>
+  {% if error %}<p class="error">{{ error }}</p>{% endif %}
+  <label for="decision">Decision</label>
+  <select id="decision" name="decision">
+    <option value="">-- Select decision --</option>
+    <option value="approve">Approve</option>
+    <option value="reject">Reject</option>
+    <option value="return">Return for Correction</option>
+  </select>
+  <label for="reason">Reason (required for Reject and Return, max {{ max_reason }} characters)</label>
+  <textarea id="reason" name="reason" rows="3">{{ reason }}</textarea>
+  <button type="submit">Save Decision</button>
+</form>
+{% else %}
+<p class="card">This listing has already been decided.</p>
+{% endif %}
+
+<h2>Decision history</h2>
+{% if decisions %}
+<table class="card">
+  <thead><tr><th>Decision</th><th>Reason</th><th>Time</th></tr></thead>
+  <tbody>
+    {% for d in decisions %}
+    <tr><td>{{ d['decision'] }}</td><td>{{ d['reason'] or '-' }}</td><td>{{ d['decided_at'] }}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="card">No decision recorded yet.</p>
+{% endif %}
+<p><a href="{{ url_for('admin_listings') }}">&larr; Back to all listings</a></p>
+{% endblock %}
