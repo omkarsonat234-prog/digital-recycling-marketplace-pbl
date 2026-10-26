@@ -25,6 +25,12 @@ Open http://127.0.0.1:5000
 - `/admin/listings/<id>` - admin: review, Approve / Reject / Return for Correction with reason
 - `/marketplace` - public marketplace, approved listings only
 
+## Integration
+- `/` - home dashboard with listing counts per status
+- `/listings/<id>/edit` - seller corrects a listing returned by the admin; it goes back to Pending
+- Seller's `/listings` page shows the admin's reason for Rejected / Needs Correction
+- `/admin/listings?status=Pending` - admin filter by status
+
 ## Tests
 ```
 python -m pytest -q
