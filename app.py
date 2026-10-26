@@ -2,6 +2,7 @@
 
 Module 1: Recycling Item Listing Management
 Module 2: Admin Listing Verification
+Integration: seller -> admin decision -> marketplace, with correction loop.
 """
 import os
 
@@ -24,9 +25,23 @@ def create_app(db_path=None):
     app.config["DB_PATH"] = db_path or os.path.join(app.root_path, "marketplace.db")
     db.init_db(app.config["DB_PATH"])
 
+    def form_context(**extra):
+        ctx = dict(
+            categories=CATEGORIES,
+            conditions=CONDITIONS,
+            max_description=MAX_DESCRIPTION,
+            form={},
+            errors={},
+        )
+        ctx.update(extra)
+        return ctx
+
     @app.route("/")
     def home():
-        return redirect(url_for("my_listings"))
+        counts = db.get_status_counts(app.config["DB_PATH"])
+        return render_template("home.html", counts=counts, total=sum(counts.values()))
+
+    # ---------------- Module 1: Listing Management ----------------
 
     @app.route("/listings/new", methods=["GET", "POST"])
     def new_listing():
@@ -45,26 +60,54 @@ def create_app(db_path=None):
                 )
                 flash("Listing submitted successfully. Status: Pending.", "success")
                 return redirect(url_for("my_listings"))
-        return render_template(
-            "listing_form.html",
-            categories=CATEGORIES,
-            conditions=CONDITIONS,
-            max_description=MAX_DESCRIPTION,
-            form=form_data,
-            errors=errors,
-        )
+        return render_template("listing_form.html", **form_context(form=form_data, errors=errors))
 
     @app.route("/listings")
     def my_listings():
         listings = db.get_all_listings(app.config["DB_PATH"])
         return render_template("listings.html", listings=listings)
 
+    @app.route("/listings/<int:listing_id>/edit", methods=["GET", "POST"])
+    def edit_listing(listing_id):
+        """Seller corrects a listing the admin returned (integration, DRM-8)."""
+        listing = db.get_listing(app.config["DB_PATH"], listing_id)
+        if listing is None:
+            abort(404)
+        if listing["status"] != "Needs Correction":
+            flash("Only listings marked 'Needs Correction' can be edited.", "error")
+            return redirect(url_for("my_listings"))
+
+        note = db.get_latest_reason(app.config["DB_PATH"], listing_id)
+        form_data, errors = dict(listing), {}
+        if request.method == "POST":
+            form_data = request.form
+            clean, errors = validate_listing(request.form)
+            if not errors:
+                db.resubmit_listing(
+                    app.config["DB_PATH"], listing_id, clean["category"], clean["quantity"],
+                    clean["condition"], clean["description"], clean["price"],
+                )
+                flash(f"Listing #{listing_id} corrected and resubmitted. Status: Pending.", "success")
+                return redirect(url_for("my_listings"))
+        return render_template(
+            "listing_form.html",
+            **form_context(
+                form=form_data, errors=errors, note=note,
+                heading=f"Correct Listing #{listing_id}", submit_label="Resubmit Listing",
+            ),
+        )
+
     # ---------------- Module 2: Admin Listing Verification ----------------
 
     @app.route("/admin/listings")
     def admin_listings():
-        listings = db.get_listings_for_admin(app.config["DB_PATH"])
-        return render_template("admin_listings.html", listings=listings)
+        status = request.args.get("status")
+        if status not in db.STATUSES:
+            status = None
+        listings = db.get_listings_for_admin(app.config["DB_PATH"], status)
+        return render_template(
+            "admin_listings.html", listings=listings, statuses=db.STATUSES, active_status=status
+        )
 
     @app.route("/admin/listings/<int:listing_id>")
     def admin_review(listing_id):
@@ -100,6 +143,10 @@ def create_app(db_path=None):
     def marketplace():
         listings = db.get_approved_listings(app.config["DB_PATH"])
         return render_template("marketplace.html", listings=listings)
+
+    @app.errorhandler(404)
+    def not_found(_error):
+        return render_template("404.html"), 404
 
     return app
 
