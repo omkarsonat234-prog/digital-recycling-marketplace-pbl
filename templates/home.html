@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Home - Digital Recycling Marketplace{% endblock %}
+{% block content %}
+<h1>Digital Recycling Marketplace</h1>
+<p>Sellers list recyclable items. An admin verifies each listing. Only approved listings appear in the public marketplace.</p>
+<div class="grid stats">
+  {% for status, n in counts.items() %}
+  <a class="card stat" href="{{ url_for('admin_listings', status=status) }}">
+    <span class="badge {{ status|lower|replace(' ', '-') }}">{{ status }}</span>
+    <span class="count">{{ n }}</span>
+  </a>
+  {% endfor %}
+</div>
+<p class="actions">
+  <a class="btn" href="{{ url_for('new_listing') }}">Create a listing</a>
+  <a class="btn secondary" href="{{ url_for('admin_listings') }}">Review listings (Admin)</a>
+  <a class="btn secondary" href="{{ url_for('marketplace') }}">Open marketplace</a>
+</p>
+{% if total == 0 %}<p class="card">No listings yet. Start by creating one.</p>{% endif %}
+{% endblock %}

@@ -23,3 +23,17 @@ th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid #e3e9e5; 
 .item h3 { margin: 0 0 8px; }
 .price { font-weight: 700; color: #1f6f4a; }
 h2 { margin-top: 28px; }
+.topbar nav a.active { border-bottom: 2px solid #fff; padding-bottom: 2px; }
+.flash.error { background: #f8d7da; color: #7a1c24; }
+.flash.warn { background: #fff3cd; color: #664d03; }
+.table-wrap { overflow-x: auto; }
+.filters a { display: inline-block; margin-right: 8px; padding: 4px 10px; border-radius: 12px; background: #e5e7eb; color: #1d2b24; text-decoration: none; }
+.filters a.active { background: #1f6f4a; color: #fff; }
+.stats { margin: 16px 0; }
+.stat { display: flex; justify-content: space-between; align-items: center; text-decoration: none; color: inherit; }
+.count { font-size: 1.8rem; font-weight: 700; }
+.actions { margin-top: 20px; }
+.btn { display: inline-block; padding: 10px 16px; margin-right: 8px; background: #1f6f4a; color: #fff; border-radius: 4px; text-decoration: none; }
+.btn.secondary { background: #4b5d54; }
+.footer { text-align: center; color: #5b6b63; font-size: .85rem; padding: 24px 0; }
+@media (max-width: 600px) { .topbar { flex-direction: column; gap: 8px; } .topbar a { margin: 0 8px; } }

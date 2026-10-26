@@ -2,7 +2,14 @@
 {% block title %}Admin - Submitted Listings{% endblock %}
 {% block content %}
 <h1>Admin: Submitted Listings</h1>
+<p class="filters">
+  <a href="{{ url_for('admin_listings') }}" class="{{ 'active' if not active_status }}">All</a>
+  {% for st in statuses %}
+  <a href="{{ url_for('admin_listings', status=st) }}" class="{{ 'active' if active_status == st }}">{{ st }}</a>
+  {% endfor %}
+</p>
 {% if listings %}
+<div class="table-wrap">
 <table class="card">
   <thead>
     <tr><th>ID</th><th>Category</th><th>Qty</th><th>Condition</th><th>Description</th><th>Price (INR)</th><th>Status</th><th></th></tr>
@@ -22,6 +29,7 @@
     {% endfor %}
   </tbody>
 </table>
+</div>
 {% else %}
 <p class="card">No listings submitted.</p>
 {% endif %}

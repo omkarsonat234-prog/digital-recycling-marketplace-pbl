@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% block title %}New Listing - Digital Recycling Marketplace{% endblock %}
 {% block content %}
-<h1>Create Recycling Item Listing</h1>
+<h1>{{ heading or 'Create Recycling Item Listing' }}</h1>
+{% if note %}<div class="flash warn">Admin note: {{ note }}</div>{% endif %}
 <form method="post" novalidate class="card">
   <label for="category">Category</label>
   <select id="category" name="category">
@@ -33,6 +34,6 @@
   <input id="price" name="price" type="text" inputmode="decimal" value="{{ form.get('price', '') }}">
   {% if errors.price %}<p class="error">{{ errors.price }}</p>{% endif %}
 
-  <button type="submit">Submit Listing</button>
+  <button type="submit">{{ submit_label or 'Submit Listing' }}</button>
 </form>
 {% endblock %}

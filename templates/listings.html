@@ -3,9 +3,10 @@
 {% block content %}
 <h1>My Listings</h1>
 {% if listings %}
+<div class="table-wrap">
 <table class="card">
   <thead>
-    <tr><th>ID</th><th>Category</th><th>Quantity</th><th>Condition</th><th>Price (INR)</th><th>Status</th><th>Created</th></tr>
+    <tr><th>ID</th><th>Category</th><th>Quantity</th><th>Condition</th><th>Price (INR)</th><th>Status</th><th>Admin note</th><th>Created</th><th></th></tr>
   </thead>
   <tbody>
     {% for l in listings %}
@@ -16,11 +17,14 @@
       <td>{{ l['condition'] }}</td>
       <td>{{ '%.2f'|format(l['price']) }}</td>
       <td><span class="badge {{ l['status']|lower|replace(' ', '-') }}">{{ l['status'] }}</span></td>
+      <td>{% if l['status'] in ('Rejected', 'Needs Correction') and l['last_reason'] %}{{ l['last_reason'] }}{% else %}-{% endif %}</td>
       <td>{{ l['created_at'] }}</td>
+      <td>{% if l['status'] == 'Needs Correction' %}<a href="{{ url_for('edit_listing', listing_id=l['id']) }}">Edit &amp; resubmit</a>{% endif %}</td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
+</div>
 {% else %}
 <p class="card">No listings yet. <a href="{{ url_for('new_listing') }}">Create your first listing.</a></p>
 {% endif %}
